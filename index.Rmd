@@ -21,3 +21,4 @@ here a physics thing
 ![](inertial2.png) (can add subdirectory images then images/intertial2.png..)
 
 # more than one page 
+ You can learn about me [here](aboutme.html)
