@@ -1,5 +1,5 @@
 ---
-title: "My awesome website"
+title: "Rebecca's website"
 output: 
   html_document:
     toc: true
@@ -11,7 +11,7 @@ output:
 
 ![](https://media.giphy.com/media/drXGoW1iudhKw/giphy.gif)
 
-# letss add some links
+# lets add some links
 
 I often use [google](https://www.google.com) to do **data science**. 
 
