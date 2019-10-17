@@ -13,9 +13,11 @@ output:
 
 # letss add some links
 
-I often use [google](google.com) to do **data science**. 
+I often use [google](https://www.google.com) to do **data science**. 
 
 ## add image
-<img src="images/image.jpg" style="width:75%">
-here a cat: 
-![](image.jpg) (would all blah.jpg to folder (can create subdirectory images and use ![](/images/blah.jpg) ))
+
+here a physics thing 
+![](inertial2.png) (can add subdirectory images then images/intertial2.png..)
+
+# more than one page 
