@@ -4,10 +4,10 @@ output:
   html_document:
     toc: true
     toc_float: true
-    theme: cerulean
+
 ---
 
-# This is Jeff's awesome website
+# This is Rebecca's website
 
 ![](https://media.giphy.com/media/drXGoW1iudhKw/giphy.gif)
 
@@ -22,3 +22,5 @@ here a physics thing
 
 # more than one page 
  You can learn about me [here](aboutme.html)
+ 
+ 
