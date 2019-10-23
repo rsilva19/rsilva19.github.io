@@ -1,36 +1,24 @@
 ---
-title: "Rebecca's Website"
+title: "Rebecca Silva"
 output: 
   html_document:
     toc: true
     toc_float: true
 
 ---
-
-# Welcome
-
-Welcome to my website. I am a first-year PhD student in the Department of Biostatistics at Columbia University Mailman School of Public Health. You can learn more about me [here](aboutme.html). 
-
-<center>
-![](DS_headshot.jpeg)
-</center>
-
-```{r, }
-img <- readJPEG("DS_headshot.jpeg")
-grid.raster(img)
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(png)
+library(grid)
 ```
 
 
-# lets add some links
+```{r, }
+img <- readPNG("DS_headshot.png")
+grid.raster(img)
+```
 
-I often use [google](https://www.google.com) to do **data science**. 
+Welcome to my website. I am a first-year PhD student in the Department of Biostatistics at Columbia University Mailman School of Public Health. You can learn more about me [here](aboutme.html). 
 
-## add image
-
-here a physics thing 
-![](inertial2.png) (can add subdirectory images then images/intertial2.png..)
-
-# more than one page 
- You can learn about me [here](aboutme.html)
  
  

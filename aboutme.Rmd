@@ -10,4 +10,5 @@ In my first first as a Biostatistics PhD student I am taking four classes and do
 
 My research experience with prediction modeling and interest in clinical trials have led me to want to look more closely at clinical trials methodology, improving effectiveness of treatment diagnosis by predicting outcomes. I graduated from Amherst College with a BA in Mathematics in 2019. See my resume below. 
 
-![](Resume_rsilva_Fall19.pdf)
+
+![](./Resume_rsilva_Fall19.pdf){width=65%}
