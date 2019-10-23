@@ -15,4 +15,4 @@ navbar:
       href: http://github.com/rsilva19/
 output:
   html_document:
-    theme: flatly
+    theme: sandstone

@@ -1,5 +1,5 @@
 ---
-title: "Rebecca's website"
+title: "Rebecca's Website"
 output: 
   html_document:
     toc: true
@@ -7,9 +7,19 @@ output:
 
 ---
 
-# This is Rebecca's website
+# Welcome
 
-![](https://media.giphy.com/media/drXGoW1iudhKw/giphy.gif)
+Welcome to my website. I am a first-year PhD student in the Department of Biostatistics at Columbia University Mailman School of Public Health. You can learn more about me [here](aboutme.html). 
+
+<center>
+![](DS_headshot.jpeg)
+</center>
+
+```{r, }
+img <- readJPEG("DS_headshot.jpeg")
+grid.raster(img)
+```
+
 
 # lets add some links
 
