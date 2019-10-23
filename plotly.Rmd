@@ -69,3 +69,38 @@ nyc_airbnb %>%
   plot_ly(x = ~neighbourhood, y = ~n, color = ~neighbourhood, type = "bar")
 ```
 
+
+
+
+---- 
+
+```{r}
+set.seed(1)
+data("instacart")
+# most popular hour of day of the week 
+# reorder vs not 
+# how order of adding to cart is related to 
+# days since prior order?
+cart = instacart %>%  sample_n(5000)
+```
+
+```{r}
+# scatter order_number vs days since prior 
+cart %>%
+  mutate(text_label = str_c("Price: $", aisle_id, '\nRating: ', order_number)) %>% 
+  plot_ly(
+    x = ~order_number, y = ~days_since_prior_order, type = "scatter", mode = "markers", # marker is put a point on observation but dont connect the dots 
+    color = ~department, text = ~text_label, alpha = 0.5)
+
+# change dow to factor 
+cart %>% 
+  mutate(order_dow = factor(order_dow, 
+                      levels = c(0:6), 
+                      labels = c("Saturday", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday")))%>% 
+  plot_ly(y = ~order_hour_of_day, color = ~order_dow, type = "box")
+
+#number of orders of product  and something like order_number 
+cart %>% 
+  plot_ly(x = ~product_name, color = ~order_dow, type = "box")
+```
+
