@@ -104,3 +104,79 @@ cart %>%
   plot_ly(x = ~product_name, color = ~order_dow, type = "box")
 ```
 
+
+```{r}
+cart %>% 
+  group_by(days_since_prior_order) %>% 
+  summarize(n = n()) %>% 
+  plot_ly(x = ~days_since_prior_order, y = ~n, type = "bar")
+
+cart %>% 
+  group_by(product_name, reordered) %>% 
+  summarize(n = n()) %>% arrange(desc(n))
+
+# scatter
+cart %>%
+  group_by(days_since_prior_order) %>% 
+  summarize( n= n()) %>% 
+  plot_ly(
+    x = ~days_since_prior_order, y = ~n, type = "scatter", mode = 'lines+markers', alpha = 0.5)
+
+
+
+cart %>% 
+  group_by(department) %>% 
+  summarize(n = n(), prop = sum(reordered)/n) %>%
+  plot_ly(
+    x = ~department, y = ~prop, color = ~department, type = "bar", alpha = 0.8) 
+
+```
+
+department and add_to_cart order 
+```{r}
+# not interesting 
+cart %>% 
+  group_by(department) %>% 
+  summarize(mean_order = mean(add_to_cart_order)) %>% 
+  plot_ly(x = ~department, y = ~mean_order, type = "bar")
+  
+```
+
+plots i mostly will use:
+
+```{r}
+# figure out how to reorder by n 
+cart %>% 
+  group_by(department) %>% 
+  summarize(n = n(), prop = sum(reordered)/n) %>%
+  plot_ly(
+    x = ~department, y = ~prop, color = ~department, type = "bar", alpha = 0.8)
+```
+
+```{r}
+#add to cart order, with reorder prop
+cart %>% 
+  group_by(add_to_cart_order) %>% 
+  summarize(n = n(), prop = sum(reordered)/n) %>%
+  plot_ly(
+    x = ~add_to_cart_order, y = ~prop, type = "scatter", mode = "line", alpha = 0.5) 
+```
+
+```{r}
+#add labels and markers and color?
+cart %>% 
+  group_by(department) %>% 
+  summarize(n = n(), prop = sum(reordered)/n) %>%
+  plot_ly(
+    x = ~department, y = ~prop, color = ~department, type = "bar", alpha = 0.8)
+```
+
+
+```{r}
+cart %>% 
+  mutate(order_dow = factor(order_dow, 
+                      levels = c(0:6), 
+                      labels = c("Saturday", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday")))%>% 
+  plot_ly(y = ~order_hour_of_day, color = ~order_dow, type = "box")
+```
+
