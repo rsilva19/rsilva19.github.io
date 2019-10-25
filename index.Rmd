@@ -14,7 +14,7 @@ library(grid)
 
 
 ```{r, }
-img <- readPNG("DS_headshot.png")
+img <- readPNG("./Pics/DS_headshot.png")
 grid.raster(img)
 ```
 

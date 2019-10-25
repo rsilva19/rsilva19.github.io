@@ -18,165 +18,68 @@ library(p8105.datasets)
 library(plotly)
 ```
 
-to zoom in, filter groups, hovering
-
-Interactive graphics 
-
-# lets make some plots
-```{r}
-set.seed(1)
-
-data(nyc_airbnb)
-nyc_airbnb = 
-  nyc_airbnb %>% 
-  mutate(rating = review_scores_location / 2) %>%
-  select(
-    neighbourhood_group, neighbourhood, rating, price, room_type, lat, long) %>%
-  filter(
-    !is.na(rating), 
-    neighbourhood_group == "Manhattan",
-    room_type == "Entire home/apt",
-    price %in% 100:500)  %>% 
-  sample_n(5000) # bc its still so big only want sample 
-```
-
 
 ```{r}
-nyc_airbnb %>%
-  mutate(text_label = str_c("Price: $", price, '\nRating: ', rating)) %>% 
+#plot 1
+cart %>% 
+  filter(department != "missing") %>% 
+  group_by(department) %>% 
+  summarize(n = n(), prop = sum(reordered)/n) %>%
+  mutate(department = fct_reorder(department, desc(prop))) %>% 
   plot_ly(
-    x = ~lat, y = ~long, type = "scatter", mode = "markers", # marker is put a point on observation but dont connect the dots 
-    color = ~price, text = ~text_label, alpha = 0.5)
-```
-
-```{r}
-common_neighborhoods =
-  nyc_airbnb %>% 
-  count(neighbourhood, sort = TRUE) %>% 
-  top_n(8) %>% 
-  select(neighbourhood)
-
-inner_join(nyc_airbnb, common_neighborhoods, by = "neighbourhood") %>% 
-  mutate(neighbourhood = fct_reorder(neighbourhood, price)) %>% 
-  plot_ly(y = ~price, color = ~neighbourhood, type = "box",
-          colors = "Set2")
-```
-
-```{r}
-nyc_airbnb %>% 
-  count(neighbourhood) %>% 
-  mutate(neighbourhood = fct_reorder(neighbourhood, n)) %>% 
-  plot_ly(x = ~neighbourhood, y = ~n, color = ~neighbourhood, type = "bar")
+    x = ~department, y = ~round(prop, digits = 2), color = ~department, type = "bar", alpha = 0.8) %>% 
+  layout(title = "Popularity of Departments defined by Reorder Probability",
+         xaxis = list(title = "Department"),
+         yaxis = list(title = "Probability Reordered"))
 ```
 
 
-
-
----- 
-
 ```{r}
-set.seed(1)
-data("instacart")
-# most popular hour of day of the week 
-# reorder vs not 
-# how order of adding to cart is related to 
-# days since prior order?
-cart = instacart %>%  sample_n(5000)
+# plot 2
+cart %>% 
+  group_by(product_name) %>% 
+  summarize(n_orders = n()) %>% 
+  top_n(10) %>% 
+  plot_ly(y = ~n_orders, color = ~order_dow, type = "box")
+
+top_10_products = 
+  cart %>% 
+  group_by(product_name) %>% 
+  summarize(n_orders = n()) %>% 
+  top_n(10) 
+
+cart %>% 
+  filter(product_name %in% pull(top_10_products, product_name)) %>% 
+  mutate(product_name = fct_reorder(product_name, add_to_cart_order)) %>%  
+  plot_ly(y = ~add_to_cart_order, color = ~product_name, type = "box") %>% 
+  layout(title = "Order Added to Cart for 10 Most Popular Produce",
+         xaxis = list(title = "Product"),
+         yaxis = list(title = "Order Added to Cart"))
 ```
 
-```{r}
-# scatter order_number vs days since prior 
-cart %>%
-  mutate(text_label = str_c("Price: $", aisle_id, '\nRating: ', order_number)) %>% 
-  plot_ly(
-    x = ~order_number, y = ~days_since_prior_order, type = "scatter", mode = "markers", # marker is put a point on observation but dont connect the dots 
-    color = ~department, text = ~text_label, alpha = 0.5)
 
-# change dow to factor 
+```{r}
+# plot 3
 cart %>% 
   mutate(order_dow = factor(order_dow, 
                       levels = c(0:6), 
-                      labels = c("Saturday", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday")))%>% 
-  plot_ly(y = ~order_hour_of_day, color = ~order_dow, type = "box")
-
-#number of orders of product  and something like order_number 
-cart %>% 
-  plot_ly(x = ~product_name, color = ~order_dow, type = "box")
-```
-
-
-```{r}
-cart %>% 
-  group_by(days_since_prior_order) %>% 
-  summarize(n = n()) %>% 
-  plot_ly(x = ~days_since_prior_order, y = ~n, type = "bar")
-
-cart %>% 
-  group_by(product_name, reordered) %>% 
-  summarize(n = n()) %>% arrange(desc(n))
-
-# scatter
-cart %>%
-  group_by(days_since_prior_order) %>% 
-  summarize( n= n()) %>% 
-  plot_ly(
-    x = ~days_since_prior_order, y = ~n, type = "scatter", mode = 'lines+markers', alpha = 0.5)
-
-
-
-cart %>% 
-  group_by(department) %>% 
-  summarize(n = n(), prop = sum(reordered)/n) %>%
-  plot_ly(
-    x = ~department, y = ~prop, color = ~department, type = "bar", alpha = 0.8) 
-
-```
-
-department and add_to_cart order 
-```{r}
-# not interesting 
-cart %>% 
-  group_by(department) %>% 
-  summarize(mean_order = mean(add_to_cart_order)) %>% 
-  plot_ly(x = ~department, y = ~mean_order, type = "bar")
-  
-```
-
-plots i mostly will use:
-
-```{r}
-# figure out how to reorder by n 
-cart %>% 
-  group_by(department) %>% 
-  summarize(n = n(), prop = sum(reordered)/n) %>%
-  plot_ly(
-    x = ~department, y = ~prop, color = ~department, type = "bar", alpha = 0.8)
-```
-
-```{r}
-#add to cart order, with reorder prop
-cart %>% 
-  group_by(add_to_cart_order) %>% 
-  summarize(n = n(), prop = sum(reordered)/n) %>%
-  plot_ly(
-    x = ~add_to_cart_order, y = ~prop, type = "scatter", mode = "line", alpha = 0.5) 
-```
-
-```{r}
-#add labels and markers and color?
-cart %>% 
-  group_by(department) %>% 
-  summarize(n = n(), prop = sum(reordered)/n) %>%
-  plot_ly(
-    x = ~department, y = ~prop, color = ~department, type = "bar", alpha = 0.8)
-```
-
-
-```{r}
-cart %>% 
-  mutate(order_dow = factor(order_dow, 
-                      levels = c(0:6), 
-                      labels = c("Saturday", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday")))%>% 
-  plot_ly(y = ~order_hour_of_day, color = ~order_dow, type = "box")
+                      labels = c("Saturday", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday"))) %>%
+  group_by(order_hour_of_day, order_dow) %>% 
+  summarize(num_orders = n()) %>%
+  ungroup() %>% 
+  pivot_wider(
+    names_from = order_dow, 
+    values_from = num_orders) %>% 
+  plot_ly( x = ~order_hour_of_day, mode = 'lines', alpha = .6) %>% 
+  add_trace(y = ~Saturday, name = 'Saturday', mode = 'lines+markers') %>%
+  add_trace(y = ~Sunday, name = 'Sunday', mode = 'lines+markers') %>% 
+  add_trace(y = ~Monday, name = 'Monday', mode = 'lines+markers') %>%
+  add_trace(y = ~Tuesday, name = 'Tuesday', mode = 'lines+markers') %>%
+  add_trace(y = ~Wednesday, name = 'Wednesday', mode = 'lines+markers') %>%
+  add_trace(y = ~Thursday, name = 'Thursday', mode = 'lines+markers') %>%
+  add_trace(y = ~Friday, name = 'Friday', mode = 'lines+markers') %>% 
+  layout(title = "Number of Orders per Hour \n by Day of the Week",
+         xaxis = list(title = "Hour of Day"),
+         yaxis = list(title = "Number of Orders"))
 ```
 
