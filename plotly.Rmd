@@ -10,16 +10,24 @@ output:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-
 library(tidyverse)
 library(viridis)
 library(p8105.datasets)
-
 library(plotly)
+library(RColorBrewer)
+```
+
+```{r}
+set.seed(1)
+cart = instacart %>%  sample_n(5000)
 ```
 
 
 ```{r}
+colourCount = length(unique(cart$department))
+getPalette = colorRampPalette(brewer.pal(9, "Set1"))
+#marker = list(color=colorRampPalette(brewer.pal(21, "Set2")))
+
 #plot 1
 cart %>% 
   filter(department != "missing") %>% 
@@ -71,13 +79,13 @@ cart %>%
     names_from = order_dow, 
     values_from = num_orders) %>% 
   plot_ly( x = ~order_hour_of_day, mode = 'lines', alpha = .6) %>% 
-  add_trace(y = ~Saturday, name = 'Saturday', mode = 'lines+markers') %>%
-  add_trace(y = ~Sunday, name = 'Sunday', mode = 'lines+markers') %>% 
-  add_trace(y = ~Monday, name = 'Monday', mode = 'lines+markers') %>%
-  add_trace(y = ~Tuesday, name = 'Tuesday', mode = 'lines+markers') %>%
-  add_trace(y = ~Wednesday, name = 'Wednesday', mode = 'lines+markers') %>%
-  add_trace(y = ~Thursday, name = 'Thursday', mode = 'lines+markers') %>%
-  add_trace(y = ~Friday, name = 'Friday', mode = 'lines+markers') %>% 
+  add_trace(y = ~Saturday, name = 'Saturday', mode = 'lines+markers',  type = "scatter") %>%
+  add_trace(y = ~Sunday, name = 'Sunday', mode = 'lines+markers', type = "scatter") %>% 
+  add_trace(y = ~Monday, name = 'Monday', mode = 'lines+markers', type = "scatter") %>%
+  add_trace(y = ~Tuesday, name = 'Tuesday', mode = 'lines+markers', type = "scatter") %>%
+  add_trace(y = ~Wednesday, name = 'Wednesday', mode = 'lines+markers', type = "scatter") %>%
+  add_trace(y = ~Thursday, name = 'Thursday', mode = 'lines+markers', type = "scatter") %>%
+  add_trace(y = ~Friday, name = 'Friday', mode = 'lines+markers', type = "scatter") %>% 
   layout(title = "Number of Orders per Hour \n by Day of the Week",
          xaxis = list(title = "Hour of Day"),
          yaxis = list(title = "Number of Orders"))
