@@ -1,11 +1,8 @@
 ---
 title: "Dashboard HW4"
 output: 
-  flexdashboard::flex_dashboard:
-    orientation: columns
-    vertical_layout: fill
+  flexdashboard::flex_dashboard
 ---
-
 ```{r setup, include=FALSE}
 library(flexdashboard)
 library(tidyverse)
@@ -19,51 +16,12 @@ set.seed(1)
 cart = instacart %>%  sample_n(5000)
 ```
 
-Column {data-width=650}
------------------------------------------------------------------------
-
-### Chart A
-
-```{r, warning= F}
-#plot 1
-cart %>% 
-  filter(department != "missing") %>% 
-  group_by(department) %>% 
-  summarize(n = n(), prop = sum(reordered)/n) %>%
-  mutate(department = fct_reorder(department, desc(prop))) %>% 
-  plot_ly(
-    x = ~department, y = ~round(prop, digits = 2), color = ~department, type = "bar", alpha = 0.8) %>% 
-  layout(title = "Popularity of Departments defined by Reorder Probability",
-         xaxis = list(title = "Department"),
-         yaxis = list(title = "Probability Reordered"))
-```
-
-Column {data-width=350}
------------------------------------------------------------------------
-
-### Chart B
-
-```{r, warning= F}
-# plot 2
-top_10_products = 
-  cart %>% 
-  group_by(product_name) %>% 
-  summarize(n_orders = n()) %>% 
-  top_n(10) 
-
-cart %>% 
-  filter(product_name %in% pull(top_10_products, product_name)) %>% 
-  mutate(product_name = fct_reorder(product_name, add_to_cart_order)) %>%  
-  plot_ly(y = ~add_to_cart_order, color = ~product_name, type = "box") %>% 
-  layout(title = "Order Added to Cart for 10 Most Popular Produce",
-         xaxis = list(title = "Product"),
-         yaxis = list(title = "Order Added to Cart"))
-```
-
-### Chart C
-
-```{r, warning= F}
-# plot 3
+Column
+-------------------------------------
+    
+### Chart 1
+    
+```{r}
 cart %>% 
   mutate(order_dow = factor(order_dow, 
                       levels = c(0:6), 
@@ -75,14 +33,80 @@ cart %>%
     names_from = order_dow, 
     values_from = num_orders) %>% 
   plot_ly( x = ~order_hour_of_day, mode = 'lines', alpha = .6) %>% 
-  add_trace(y = ~Saturday, name = 'Saturday', mode = 'lines+markers') %>%
-  add_trace(y = ~Sunday, name = 'Sunday', mode = 'lines+markers') %>% 
-  add_trace(y = ~Monday, name = 'Monday', mode = 'lines+markers') %>%
-  add_trace(y = ~Tuesday, name = 'Tuesday', mode = 'lines+markers') %>%
-  add_trace(y = ~Wednesday, name = 'Wednesday', mode = 'lines+markers') %>%
-  add_trace(y = ~Thursday, name = 'Thursday', mode = 'lines+markers') %>%
-  add_trace(y = ~Friday, name = 'Friday', mode = 'lines+markers') %>% 
+  add_trace(y = ~Saturday, name = 'Saturday', mode = 'lines+markers',  type = "scatter") %>%
+  add_trace(y = ~Sunday, name = 'Sunday', mode = 'lines+markers', type = "scatter") %>% 
+  add_trace(y = ~Monday, name = 'Monday', mode = 'lines+markers', type = "scatter") %>%
+  add_trace(y = ~Tuesday, name = 'Tuesday', mode = 'lines+markers', type = "scatter") %>%
+  add_trace(y = ~Wednesday, name = 'Wednesday', mode = 'lines+markers', type = "scatter") %>%
+  add_trace(y = ~Thursday, name = 'Thursday', mode = 'lines+markers', type = "scatter") %>%
+  add_trace(y = ~Friday, name = 'Friday', mode = 'lines+markers', type = "scatter") %>% 
   layout(title = "Number of Orders per Hour \n by Day of the Week",
+         xaxis = list(title = "Hour of Day"),
+         yaxis = list(title = "Number of Orders"))
+```
+   
+Column {.tabset}
+-------------------------------------
+   
+### Chart 2
+
+```{r}
+top_10_products = 
+  cart %>% 
+  group_by(product_name) %>% 
+  summarize(n_orders = n()) %>% 
+  top_n(10) 
+
+cart %>% 
+  filter(product_name %in% pull(top_10_products, product_name)) %>% 
+  mutate(product_name = fct_reorder(product_name, add_to_cart_order)) %>%  
+  plot_ly(y = ~add_to_cart_order, 
+          color = ~product_name, 
+          colors = "Accent",
+          type = "box") %>% 
+  layout(title = "Order Added to Cart for 10 Most Popular Produce",
+         xaxis = list(title = "Product"),
+         yaxis = list(title = "Order Added to Cart"))
+```   
+ 
+### Chart 3
+    
+```{r}
+#plot 1
+cart %>% 
+  filter(department != "missing") %>% 
+  group_by(department) %>% 
+  summarize(n = n(), prop = sum(reordered)/n) %>%
+  mutate(department = fct_reorder(department, desc(prop))) %>% 
+  plot_ly(
+    x = ~department, 
+    y = ~round(prop, digits = 2), 
+    color = ~department, 
+    colors = "Accent",
+    type = "bar", 
+    alpha = 0.8) %>% 
+  layout(title = "Popularity of Departments defined by Reorder Probability",
+         xaxis = list(title = "Department"),
+         yaxis = list(title = "Probability Reordered"))
+```
+    
+  
+### Chart 4
+
+```{r}
+# plot 4
+cart %>% 
+  group_by(order_hour_of_day) %>% 
+  mutate(n_orders = n()) %>% 
+  ungroup() %>% 
+  plot_ly(
+    x = ~order_hour_of_day, 
+    y = ~n_orders, 
+    type = "scatter", 
+    mode = "markers", 
+    color = ~department, 
+    colors = "Accent") %>% 
+  layout(title = "Number of Orders per Hour by Department",
          xaxis = list(title = "Hour of Day"),
          yaxis = list(title = "Number of Orders"))
 ```

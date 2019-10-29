@@ -24,10 +24,6 @@ cart = instacart %>%  sample_n(5000)
 
 
 ```{r}
-colourCount = length(unique(cart$department))
-getPalette = colorRampPalette(brewer.pal(9, "Set1"))
-#marker = list(color=colorRampPalette(brewer.pal(21, "Set2")))
-
 #plot 1
 cart %>% 
   filter(department != "missing") %>% 
@@ -44,11 +40,6 @@ cart %>%
 
 ```{r}
 # plot 2
-cart %>% 
-  group_by(product_name) %>% 
-  summarize(n_orders = n()) %>% 
-  top_n(10) %>% 
-  plot_ly(y = ~n_orders, color = ~order_dow, type = "box")
 
 top_10_products = 
   cart %>% 
@@ -87,6 +78,24 @@ cart %>%
   add_trace(y = ~Thursday, name = 'Thursday', mode = 'lines+markers', type = "scatter") %>%
   add_trace(y = ~Friday, name = 'Friday', mode = 'lines+markers', type = "scatter") %>% 
   layout(title = "Number of Orders per Hour \n by Day of the Week",
+         xaxis = list(title = "Hour of Day"),
+         yaxis = list(title = "Number of Orders"))
+```
+
+```{r}
+# plot 4
+cart %>% 
+  group_by(order_hour_of_day) %>% 
+  mutate(n_orders = n()) %>% 
+  ungroup() %>% 
+  plot_ly(
+    x = ~order_hour_of_day, 
+    y = ~n_orders, 
+    type = "scatter", 
+    mode = "markers", 
+    color = ~department, 
+    colors = "Accent") %>% 
+  layout(title = "Number of Orders per Hour by Department",
          xaxis = list(title = "Hour of Day"),
          yaxis = list(title = "Number of Orders"))
 ```
