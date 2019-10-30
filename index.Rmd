@@ -1,5 +1,5 @@
 ---
-title: "Rebecca Silva"
+title: ""
 output: 
   html_document:
     toc: true
@@ -17,6 +17,8 @@ library(grid)
 img <- readPNG("./Pics/DS_headshot.png")
 grid.raster(img)
 ```
+
+## Hi, I'm Rebecca Silva
 
 Welcome to my website. I am a first-year PhD student in the Department of Biostatistics at Columbia University Mailman School of Public Health. You can learn more about me [here](aboutme.html). 
 
