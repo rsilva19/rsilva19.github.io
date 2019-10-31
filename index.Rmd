@@ -19,7 +19,7 @@ grid.raster(img)
 ```
 
 
-Welcome to my website. I am a first-year PhD student in the Department of Biostatistics at Columbia University Mailman School of Public Health. You can learn more about me [here](aboutme.html). 
+Welcome to my website! I am a first-year PhD student in the Department of Biostatistics at Columbia University Mailman School of Public Health. You can learn more about me [here](aboutme.html). 
 
  
  

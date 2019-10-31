@@ -15,4 +15,4 @@ My research experience with prediction modeling and interest in clinical trials 
 <iframe id="" style="border:1px solid #666CCC" title="" src="Resume_rsilva_Fall19.pdf" frameborder="1" scrolling="auto" height="1100" width="850" ></iframe>
 
 
-
+Find out more about my research [here](research.html). 
