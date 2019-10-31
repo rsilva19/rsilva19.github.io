@@ -8,6 +8,7 @@ output:
 # Summer 2019
 
 I worked under Dick DeVeaux, a statistics professor at Williams College, training a neural network and general additive model to predict an age-adjusted time ratio for runners. Specifically, I used data from the Dipsea Race in California which is a race where the goal is for all participants to finish together. Therefore each person gets a headstart depending on sex and age. Our goal was to build a model to better optimize the head starts in the Dipsea Race so that runners of any age had an equal chance of winning. In the past decade, the winners of the Dipsea Race have been in or around their 60s, and we want a model that makes it possible for runners with no head start to catch up.
+
 You can read more about my work and view my code [here](https://github.com/rsilva19/Dipsea_Race). 
 
 
