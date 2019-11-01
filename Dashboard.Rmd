@@ -51,6 +51,26 @@ Column {.tabset}
 ### Chart 2
 
 ```{r}
+cart %>% 
+  filter(department != "missing") %>% 
+  group_by(department) %>% 
+  summarize(n = n(), prop = sum(reordered)/n) %>%
+  mutate(department = fct_reorder(department, desc(prop))) %>% 
+  plot_ly(
+    x = ~department, 
+    y = ~round(prop, digits = 2), 
+    color = ~department, 
+    colors = "Accent",
+    type = "bar", 
+    alpha = 0.8) %>% 
+  layout(title = "Popularity of Departments defined by Reorder Probability",
+         xaxis = list(title = "Department"),
+         yaxis = list(title = "Probability Reordered"))
+```   
+ 
+### Chart 3
+    
+```{r}
 top_10_products = 
   cart %>% 
   group_by(product_name) %>% 
@@ -67,47 +87,6 @@ cart %>%
   layout(title = "Order Added to Cart for 10 Most Popular Produce",
          xaxis = list(title = "Product"),
          yaxis = list(title = "Order Added to Cart"))
-```   
- 
-### Chart 3
-    
-```{r}
-#plot 1
-cart %>% 
-  filter(department != "missing") %>% 
-  group_by(department) %>% 
-  summarize(n = n(), prop = sum(reordered)/n) %>%
-  mutate(department = fct_reorder(department, desc(prop))) %>% 
-  plot_ly(
-    x = ~department, 
-    y = ~round(prop, digits = 2), 
-    color = ~department, 
-    colors = "Accent",
-    type = "bar", 
-    alpha = 0.8) %>% 
-  layout(title = "Popularity of Departments defined by Reorder Probability",
-         xaxis = list(title = "Department"),
-         yaxis = list(title = "Probability Reordered"))
 ```
     
   
-### Chart 4
-
-```{r}
-# plot 4
-cart %>% 
-  group_by(order_hour_of_day) %>% 
-  mutate(n_orders = n()) %>% 
-  ungroup() %>% 
-  plot_ly(
-    x = ~order_hour_of_day, 
-    y = ~n_orders, 
-    type = "scatter", 
-    mode = "markers", 
-    color = ~department, 
-    colors = "Accent") %>% 
-  layout(title = "Number of Orders per Hour by Department",
-         xaxis = list(title = "Hour of Day"),
-         yaxis = list(title = "Number of Orders"))
-```
-
